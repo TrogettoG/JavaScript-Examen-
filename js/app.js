@@ -1,7 +1,11 @@
 var calculadora = {
 
+	display: document.getElementById('display'),
+	displayValue: '0',
+
 	init: (function(){
-		this.eventosBtn("teclado");
+		this.eventosBtn("teclado")
+		this.functionNumber()
 	}),
 
 //Evento para botones
@@ -39,7 +43,42 @@ var calculadora = {
 
 	btnGr: function(elementoDOM){
 			elementoDOM.style.padding = '0px';
+		},
+
+//Funcion mostrar numeros y evaluar cero 
+	
+	functionNumber: function(){
+		document.getElementById("0").addEventListener("click", function() {calculadora.entryNumber("0");});
+		document.getElementById("1").addEventListener("click", function() {calculadora.entryNumber("1");});
+		document.getElementById("2").addEventListener("click", function() {calculadora.entryNumber("2");});
+		document.getElementById("3").addEventListener("click", function() {calculadora.entryNumber("3");});
+		document.getElementById("4").addEventListener("click", function() {calculadora.entryNumber("4");});
+		document.getElementById("5").addEventListener("click", function() {calculadora.entryNumber("5");});
+		document.getElementById("6").addEventListener("click", function() {calculadora.entryNumber("6");});
+		document.getElementById("7").addEventListener("click", function() {calculadora.entryNumber("7");});
+		document.getElementById("8").addEventListener("click", function() {calculadora.entryNumber("8");});
+		document.getElementById("9").addEventListener("click", function() {calculadora.entryNumber("9");});
+	},
+
+	entryNumber: function(value){
+		if (this.displayValue.length < 8) {
+		
+			if (this.displayValue=="0") {
+				this.displayValue = "";
+				this.displayValue = this.displayValue + value;
+			} else {
+				this.displayValue = this.displayValue + value;
+			}
+		this.displayUpdate();
 		}
+	},
+
+	displayUpdate: function(){
+		this.display.innerHTML = this.displayValue;
+	},
+
+	
+
 
 };
 
