@@ -6,6 +6,7 @@ var calculadora = {
 	init: (function(){
 		this.eventosBtn("teclado")
 		this.functionNumber()
+		this.functionNan()
 	}),
 
 //Evento para botones
@@ -64,10 +65,10 @@ var calculadora = {
 		if (this.displayValue.length < 8) {
 		
 			if (this.displayValue=="0") {
-				this.displayValue = "";
-				this.displayValue = this.displayValue + value;
+				this.displayValue = ""
+				this.displayValue = this.displayValue + value
 			} else {
-				this.displayValue = this.displayValue + value;
+				this.displayValue = this.displayValue + value
 			}
 		this.displayUpdate();
 		}
@@ -77,7 +78,18 @@ var calculadora = {
 		this.display.innerHTML = this.displayValue;
 	},
 
-	
+//Funciones botones no numericos
+
+	functionNan: function (){
+		document.getElementById("on").addEventListener("click", function() {calculadora.deleteDisplay();});
+	},
+
+//Presionar tecla ON/C borrar numeros en display
+
+	deleteDisplay: function(){
+		  this.displayValue = "0"
+		  this.displayUpdate()
+	},
 
 
 };
