@@ -83,6 +83,7 @@ var calculadora = {
 	functionNan: function (){
 		document.getElementById("on").addEventListener("click", function() {calculadora.deleteDisplay();})
 		document.getElementById("punto").addEventListener("click", function() {calculadora.entryDot();})
+		document.getElementById("sign").addEventListener("click", function() {calculadora.changeSymbol();})
 	},
 
 //Presionar tecla ON/C borrar numeros en display
@@ -97,13 +98,29 @@ var calculadora = {
 	entryDot: function(){
 		if (this.displayValue.indexOf(".")== -1) {
 			if (this.displayValue == ""){
-				this.displayValue = this.displayValue + "0.";
+				this.displayValue = this.displayValue + "0."
 			} else {
-				this.displayValue = this.displayValue + ".";
+				this.displayValue = this.displayValue + "."
 			}
-			this.displayUpdate();
+		this.displayUpdate()
+		}
+	},
+
+//Ingreso signo - 
+	changeSymbol: function(){
+			if (this.displayValue !="0") {
+				var sign
+				if (this.displayValue.charAt(0)=="-") {
+					sign = this.displayValue.slice(1)
+				}	else {
+					sign = "-" + this.displayValue
+				}
+			this.displayValue = ""
+			this.displayValue = sign
+			this.displayUpdate()
 			}
-		},
+	},
+
 
 };
 
