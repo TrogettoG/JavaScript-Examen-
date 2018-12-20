@@ -1,39 +1,46 @@
 var calculadora = {
 
 	display: document.getElementById('display'),
-	displayValue: '0',
+	displayValue: "0",
+	result: 0,
+	firstValue:0,
+	secondValue:0,
+	lastValue:0,
+	oper: "",
+	auxResult: false,
+
 
 	init: (function(){
-		this.eventosBtn("teclado")
+		this.eventBtn("teclado")
 		this.functionNumber()
 		this.functionNan()
 	}),
 
 //Evento para botones
 
-	eventosBtn: function(selector){
+	eventBtn: function(selector){
 		var selectorBtn = document.querySelectorAll('.' + selector + ' img')
 		for (var i=0; i<selectorBtn.length; i++) {
-			selectorBtn[i].onclick = this.eventoBtnCh
-			selectorBtn[i].onmouseleave = this.eventoBtnGr
+			selectorBtn[i].onclick = this.eventBtnSm
+			selectorBtn[i].onmouseleave = this.eventBtnLg
 
 
 		}
 	},
 
-	eventoBtnCh: function(event){
-		calculadora.btnCh(event.target)
+	eventBtnSm: function(event){
+		calculadora.btnSm(event.target)
 	},
 
-	eventoBtnGr: function(event){
-		calculadora.btnGr(event.target)
+	eventBtnLg: function(event){
+		calculadora.btnLg(event.target)
 	},
 
 
 
 //Formato botones
 
-	btnCh: function(element){
+	btnSm: function(element){
 		var tecla = element.id;
 		if (tecla=='1' || tecla=='2' || tecla=='3' || tecla=='4' || tecla=='5' || tecla=='6' || tecla=='7' || tecla=='8' || tecla=='9' || tecla=='0') {
 		element.style.padding = "1.5px"
@@ -42,7 +49,7 @@ var calculadora = {
 		}
 	},
 
-	btnGr: function(elementoDOM){
+	btnLg: function(elementoDOM){
 			elementoDOM.style.padding = '0px'
 		},
 
@@ -74,9 +81,6 @@ var calculadora = {
 		}
 	},
 
-	displayUpdate: function(){
-		this.display.innerHTML = this.displayValue;
-	},
 
 //Funciones botones no numericos
 
@@ -84,13 +88,25 @@ var calculadora = {
 		document.getElementById("on").addEventListener("click", function() {calculadora.deleteDisplay();})
 		document.getElementById("punto").addEventListener("click", function() {calculadora.entryDot();})
 		document.getElementById("sign").addEventListener("click", function() {calculadora.changeSymbol();})
+		document.getElementById("mas").addEventListener("click", function() {calculadora.entryOperation("+");})
+		document.getElementById("menos").addEventListener("click", function() {calculadora.entryOperation("-");})
+		document.getElementById("por").addEventListener("click", function() {calculadora.entryOperation("*");})
+		document.getElementById("dividido").addEventListener("click", function() {calculadora.entryOperation("/");})
+		document.getElementById("raiz").addEventListener("click", function() {calculadora.entryOperation("raiz");})
+		document.getElementById("igual").addEventListener("click", function() {calculadora.endResult();})
 	},
 
 //Presionar tecla ON/C borrar numeros en display
 
 	deleteDisplay: function(){
-		this.displayValue = "0"
-		this.displayUpdate()
+		this.displayValue = "0";
+		this.opValue = "";
+		this.firstValue = 0;
+		this.secondValue = 0;
+		this.result = 0;
+		this.auxResult = false;
+		this.lastValue = 0;
+		this.displayUpdate();
 	},
 
 //Ingreso decimal "punto"
@@ -107,6 +123,7 @@ var calculadora = {
 	},
 
 //Ingreso signo - 
+
 	changeSymbol: function(){
 			if (this.displayValue !="0") {
 				var sign
@@ -121,6 +138,71 @@ var calculadora = {
 			}
 	},
 
+//Operaciones
+
+	entryOperation: function(oper){
+		this.firstValue = parseFloat(this.displayValue)
+		this.displayValue = ""
+		this.opValue = oper 
+		this.auxResult = false
+		this.displayUpdate()
+	},
+
+	operation: function(firstValue, secondValue, opValue){
+		switch(opValue){
+			case "+": 
+				this.result = eval(firstValue + secondValue)
+			break;
+
+			case "-": 
+				this.result = eval(firstValue - secondValue)
+			break;
+
+			case "*": 
+				this.result = eval(firstValue * secondValue)
+			break;
+
+			case "/": 
+				this.result = eval(firstValue / secondValue)
+			break;
+
+			case "raiz":
+				this.result = eval(Math.sqrt(firstValue))
+		}
+	},
+
+//Tecla IGUAL
+
+	endResult: function(){ 
+
+		if(!this.auxResult){ 
+			this.secondValue = parseFloat(this.displayValue)
+			this.lastValue = this.secondValue;
+			this.operation(this.firstValue, this.secondValue, this.opValue)
+		
+		} else { 
+			this.operation(this.firstValue, this.lastValue, this.opValue)
+		}
+
+		this.firstValue = this.result
+		this.displayValue = ""
+
+		if (this.result.toString().length < 9){
+			this.displayValue = this.result.toString()
+		} else {
+			this.displayValue = this.result.toString().slice(0,8) + "..."
+		}
+
+		this.auxResult = true
+		this.displayUpdate()
+	
+	},
+	
+//Display 
+
+	displayUpdate: function(){
+		this.display.innerHTML = this.displayValue
+	}
 
 };
 
